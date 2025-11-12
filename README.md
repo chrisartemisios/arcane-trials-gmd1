@@ -17,8 +17,8 @@
 **Name:** Christos Artemisios  
 **GitHub:** [@chrisartemisios](https://github.com/chrisartemisios)  
 **Course:** GMD1 - Game Development  
-**Institution:** VIA University College, Software Engineering (3rd Semester)  
-**Semester:** Spring 2025  
+**Institution:** VIA University College, Software Engineering (6th Semester)  
+**Semester:** Autumn 2025  
 **Project Type:** Solo Development  
 
 ---
@@ -141,7 +141,7 @@ arcane-trials-gmd1/
 
 ## 🏗️ Development Milestones
 
-### Milestone 1: Core Combat Foundation (Weeks 1-4)
+### Milestone 1: Core Combat Foundation (Weeks 1)
 **Goal:** Playable Dark Arts Defense challenge with basic enemy AI
 
 **Deliverables:**
@@ -151,7 +151,7 @@ arcane-trials-gmd1/
 - Basic UI (health, score, wave counter)
 - Core audio implementation
 
-### Milestone 2: Challenge Variety (Weeks 5-8)
+### Milestone 2: Challenge Variety (Weeks 2)
 **Goal:** Multiple challenge types with improved systems
 
 **Deliverables:**
@@ -161,7 +161,7 @@ arcane-trials-gmd1/
 - Animation system implementation
 - Advanced enemy behaviors
 
-### Milestone 3: Integration & Polish (Weeks 9-12)
+### Milestone 3: Integration & Polish (Weeks 3)
 **Goal:** Complete game experience with arcade optimization
 
 **Deliverables:**
@@ -177,8 +177,8 @@ arcane-trials-gmd1/
 
 **Course:** GMD1 - Game Development  
 **Institution:** VIA University College  
-**Semester:** Spring 2025  
-**Final Deadline:** May 28, 2025  
+**Semester:** Autumn 2025  
+**Final Deadline:** December 19, 2025  
 
 **Assessment Criteria:**
 - Demonstrates all 8 learning objectives
