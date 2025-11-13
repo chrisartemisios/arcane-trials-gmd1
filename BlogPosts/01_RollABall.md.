@@ -1,0 +1,172 @@
+# Blog Post #1: Rolling - My First Steps
+
+**Date:** November 13, 2025  
+**Author:** Christos Artemisios  
+**Course:** GMD1 - Game Development, VIA University College  
+
+---
+
+## The Beginning of Something Exciting
+
+When I first opened Unity after downloading it, I felt a mix of excitement and intimidation. The interface looked complex, with panels everywhere and buttons I didn't understand. But after completing Unity's initial onboarding tutorial, I was ready to tackle Roll-a-Ball—and honestly? It was way more fun than I expected.
+
+This wasn't just about following steps. It was about understanding *why* a ball rolls, *how* physics works in a game engine, and discovering that making games isn't magic—it's logic, creativity, and a whole lot of problem-solving.
+
+---
+
+## Making Things Move (And Understanding Why It Matters)
+
+The first real "aha!" moment came when I realized how Unity separates *getting input* from *using that input*. There's this beautiful callback system where Unity tells my script "Hey, the player moved the joystick" through an `OnMove` function, and then I store those values to use later in physics calculations.
+
+But here's the cool part: the tutorial taught me to use `FixedUpdate()` instead of the regular `Update()` function for physics. Why? Because physics needs to run at a consistent rate, not tied to how fast the game is rendering frames. This might sound technical, but it clicked when I saw it in action—the ball moves smoothly regardless of whether my computer is struggling or cruising.
+
+The movement code itself is surprisingly simple:
+```csharp
+Vector3 movement = new Vector3(movementX, 0.0f, movementY);
+rb.AddForce(movement * speed);
+```
+
+Just three lines to make a ball roll around! The `AddForce` part was genius—it doesn't teleport the ball or snap it to positions. It *pushes* the ball like you would in real life, and Unity's physics engine handles all the rolling, momentum, and realistic movement. I didn't have to program any of that complexity!
+
+### When Things Disappear vs. When They Bounce
+
+One of my favorite discoveries was learning about **triggers** versus **collisions**. At first, I thought they were the same thing—something touches something else, right? But Unity has two completely different systems:
+
+**Triggers** let things pass through each other while detecting the contact. Perfect for collectibles! The ball rolls through the golden cubes, they vanish, and my score goes up. No bouncing, no physics reaction—just pure detection.
+
+**Collisions**, on the other hand, are for when things should physically interact. I added an enemy cube that the player shouldn't touch. When the ball hits it? Game over. The collision stops the ball dead and ends the game. Two different systems, two different purposes, both incredibly useful.
+
+This distinction is going to be crucial for Arcane Trials. Spell projectiles that pass through enemies to hit what's behind them? Triggers. Walls that stop the player? Collisions. Mind. Blown.
+
+### Seeing Numbers Change (The Joy of UI)
+
+Getting the score counter working was satisfying in a way I didn't expect. There's something magical about seeing "Count: 0" turn into "Count: 1" the moment you touch a collectible. It's such a small thing, but it makes the game feel *real*.
+
+The tutorial taught me to update UI through a dedicated function called whenever something changes:
+```csharp
+void setCountText()
+{
+    countText.text = "Count: " + count.ToString();
+    if (count >= 13)
+    {
+        winTextObject.SetActive(true);
+    }
+}
+```
+
+What I love about this approach is how clean it is. The score updates in ONE place, not scattered all over my code. When I collect a pickup, I just increase the count and call this function. When I need to check for victory, it's right here too. Everything related to displaying the score lives together.
+
+---
+
+## The Lightbulb Moment: Everything is LEGO Blocks
+
+Here's what blew my mind about Unity: **everything is built from components**. The ball isn't just "a ball." It's a GameObject (an empty container) with a bunch of components attached:
+- A Transform (where it is, how it's rotated, how big it is)
+- A Rigidbody (makes it obey physics—gravity, momentum, forces)
+- A Sphere Collider (defines its physical shape for collisions)
+- My PlayerController script (the custom behavior I wrote)
+
+It's like LEGO! You don't have one giant LEGO piece that's a whole spaceship. You snap together smaller pieces—wings, cockpit, engines—and suddenly you have a spaceship. Same with Unity. Snap together Transform + Rigidbody + Collider + Script, and suddenly you have a player character.
+
+This realization is going to change everything for Arcane Trials. My wizard character? Transform + Rigidbody2D + Collider2D + WizardController + SpellCaster. Different pieces, same modular approach. I can mix and match components to create exactly what I need.
+
+---
+
+## Going Off-Script: My Obstacle Course Adventure
+
+Once I finished the basic tutorial, I couldn't resist tinkering. The tutorial's flat arena with scattered collectibles was fine, but I wanted more. So I started building.
+
+### Creating Chaos (In a Good Way)
+
+I added walls. Not just little barriers—massive elevated cube structures that blocked the camera's view and created these mysterious enclosed spaces. The psychology here was deliberate: if players can't see where all the collectibles are, they have to *explore*. They can't just count the remaining golden cubes and know when they're done.
+
+Some pickups are hidden in corners. Some are tucked behind tall walls. Some are in plain sight but require navigating a maze to reach. I didn't tell players how many they needed to collect (the counter just says "Count: X" without showing the total), so they'd have to explore the entire arena to be sure they'd won.
+
+When I playtested this with friends, watching them search for that last hidden cube was hilarious. They'd circle the arena three times, convinced they'd missed something. Mission accomplished!
+
+### My First Enemy AI (And the Typo That Haunted Me)
+
+I wanted to add danger, so I implemented a NavMesh enemy—a red cube that actively chases the player. Setting this up involved:
+1. Baking a NavMesh (basically telling Unity which areas are walkable)
+2. Adding a NavMesh Agent to the enemy
+3. Writing a script that constantly updates its destination to the player's position
+
+For about an hour, this didn't work. The enemy just sat there, unmoving, mocking me. I checked the NavMesh—fine. I checked the agent settings—fine. I stared at my code for what felt like forever.
+
+Then I saw it. A typo. One variable name was spelled slightly wrong. Fixed it, hit play, and suddenly the enemy was sprinting after me like its life depended on it. **Lesson learned: Unity's error messages are your friends, and typos are your enemies.**
+
+### When Friends Become Playtesters
+
+The best part? Watching other people play. I had several friends try the game, and each one approached it differently:
+
+- One friend tried to speed-run it, optimizing their route to collect cubes as fast as possible
+- Another moved cautiously, terrified of the chasing enemy
+- One friend... tried to break it
+
+That last one discovered something I never anticipated: you can build up enough momentum by running into walls that you can *launch the ball outside the arena*. They escaped the boundaries entirely. The ball fell into the void, and the game kept running because I hadn't programmed a "fell off the map" check.
+
+That wasn't in the tutorial. That's a real problem I need to fix! I'd need to either:
+- Add invisible walls beyond the visible boundaries
+- Detect when the player leaves bounds and respawn them
+- Create "death zones" that trigger game over if you fall out
+
+But you know what? Finding bugs through playtesting was weirdly exciting. It's a problem to solve, a system to improve. This is what game development is!
+
+---
+
+## What This Means for Arcane Trials
+
+Roll-a-Ball wasn't just a tutorial—it was a foundation. Every concept I learned here will show up in my main project, just in different forms:
+
+**Physics-based movement?** My wizard will probably use Rigidbody2D for responsive 2D movement, but I'll likely use velocity instead of forces so the controls feel snappier and more arcade-like.
+
+**Tags for identification?** Absolutely. I'll need tags for different enemy types (MeleeEnemy, RangedEnemy, Boss), spell projectiles (PlayerSpell, EnemySpell), and environmental elements. Organization is key when things get complex.
+
+**Separation of concerns?** That `setCountText()` function taught me something important: keep related code together. For Arcane Trials, I'll have dedicated managers (UIManager, ScoreManager, WaveManager) instead of dumping everything into one giant script.
+
+**FixedUpdate for physics?** Critical for spell projectiles and enemy movement. I need consistent, predictable gameplay on the VIA Arcade Machine, regardless of frame rate fluctuations.
+
+But most importantly? **Building this simple game gave me confidence.** I know how to make things move, detect collisions, update UI, and add enemies now. Arcane Trials is bigger and more complex, but it's built from these same fundamental pieces.
+
+---
+
+## Looking Forward: The Journey Begins
+
+Finishing Roll-a-Ball felt like unlocking a door. On the other side? A whole world of possibilities.
+
+The tutorial was easier than I expected, mostly because I'd already done Unity's initial onboarding. But that doesn't make it less valuable—it made things *click*. I moved from "following instructions" to "understanding why these instructions work." That's the difference between memorizing and learning.
+
+The component system, the physics engine, the input handling, the collision detection—all of these are tools in my toolkit now. They're not mysterious black boxes anymore. They're systems I understand, can modify, and can combine in new ways.
+
+What excites me most? **The moment when I stopped following the tutorial and started creating.** Building that obstacle course, adding the chasing enemy, watching friends playtest—that's when it became *my* game instead of just a tutorial I completed. That's the feeling I want for Arcane Trials: not just building what's required, but creating something that surprises me in the process.
+
+Next up: writing the Game Design Document and diving into Milestone 1. Time to turn this wizard game concept into reality. The foundation is laid. Now comes the fun part: building something unique on top of it.
+
+**Unity, I'm ready for you. Let's make some magic.** ✨
+
+---
+
+## Screenshots
+
+### My Obstacle Course in Action
+![The ball navigating through elevated walls and hidden spaces](../Assets/BlogImages/rollball_gameplay.png)
+
+*Players have to explore the entire arena to find all 13 hidden collectibles*
+
+### The Full Arena Layout
+![Top-down view showing the complexity of the obstacle course](../Assets/BlogImages/rollball_topdown.png)
+
+*Strategic wall placement creates mysteries—you can't see everything from the start*
+
+### Behind the Scenes
+![Unity editor showing the scene hierarchy and components](../Assets/BlogImages/rollball_editor.png)
+
+*Every object is just a collection of components working together*
+
+---
+
+**Unity Learn Submission:** https://learn.unity.com/submission/rollaball-219
+
+**Character Count:** ~5,200 characters (well above the 1,500 minimum!)
+
+**What's Next:** Game Design Document for Arcane Trials, where this simple ball-rolling game evolves into a full wizard combat experience. Stay tuned! 🧙‍♂️
